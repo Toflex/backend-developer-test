@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb'
+import { Collection, MongoClient } from 'mongodb'
 import config = require('config');
 
 const host = config.get("mongodb.host")
@@ -7,21 +7,36 @@ const dbName = config.get("mongodb.dbName")
 
 // Connection URL
 const url = `mongodb://${host}:${port}`;
-const client = new MongoClient(url);
+export const client = new MongoClient(url);
 
-async function main() {
+// Collections
+var userCol
+var fixtureCol
+var teamCol
+
+export async function main() {
   // Use connect method to connect to the server
   await client.connect();
   console.log('Connected successfully to server');
   const db = client.db(dbName);
-  const collection = db.collection('documents');
+ 
+  userCol = db.collection('users');
+  fixtureCol = db.collection('fixtures');
+  teamCol = db.collection('teams');
 
-  // the following code examples can be pasted here...
+  // const collection = db.collection('test');
 
-  return 'done.';
+  // let id=uuid.v4()
+  // const insertResult = await collection.insertOne({ name: "Shola", _id: id, email: "abc@mail.com" });
+  // console.log('Inserted documents =>', insertResult);
+
+  // var data = await collection.findOne({ _id: id });
+  // console.log('Filter documents =>', data);
+
+  // data = await collection.count({ "name": "Bola" });
+  // console.log('Filter documents =>', data);
+
+  return 'Mongodb connected successfully.';
 }
 
-main()
-  .then(console.log)
-  .catch(console.error)
-  .finally(() => client.close());
+export {userCol, fixtureCol, teamCol}
